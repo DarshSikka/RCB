@@ -55,10 +55,6 @@ export default class Signup extends Component {
           console.log(user);
         })
         .catch(err=>console.error(err))}} style={styles.Button}><Text style={styles.Text}>Sign Up With Google</Text></TouchableHighlight>
-        <View><Text style={styles.Text}>Or Sign Up with email</Text>
-        <TextInput style={styles.Input}placeholder="Email" onChangeText={(u)=>{this.setState({username:u, password:this.state.password})}}/>
-        <TextInput style={styles.Input}placeholder="Password" onChangeText={(t)=>{this.setState({username:this.state.username, password:t})}}/></View>
-        <TouchableHighlight style={styles.Button}><Text style={styles.Text}>Sign Up</Text></TouchableHighlight>
     </SafeAreaView>);
     }
 }
