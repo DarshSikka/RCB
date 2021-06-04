@@ -2,14 +2,30 @@ import React, { Component } from 'react';
 import { View, SafeAreaView , Text, Button, TextInput, StyleSheet, TouchableHighlight} from 'react-native';
 import color from '../styles/color';
 import * as Font from 'expo-font';
-class Signup extends Component {
-    state = {
-        username:"",
-        password:""
-    }
-    SignInWithGoogle=()=>{
-        const provider=new GoogleAuthProvider();
-    }
+import firebase from 'firebase';
+import { getAuth, getRedirectResult, GoogleAuthProvider , signInWithRedirect} from "firebase/firebase-auth";
+import { Prompt_600SemiBold } from '@expo-google-fonts/dev';
+const firebaseConfig = {
+  apiKey: "AIzaSyDsFkH0tSiIHaU5P4YLCsX9wS5C0h8ufME",
+  authDomain: "club-app-52c8c.firebaseapp.com",
+  databaseURL: "https://club-app-52c8c-default-rtdb.firebaseio.com",
+  projectId: "club-app-52c8c",
+  storageBucket: "club-app-52c8c.appspot.com",
+  messagingSenderId: "728775782661",
+  appId: "1:728775782661:web:580ee3f458f7f18e0c076c",
+  measurementId: "G-MD4XLD9YS2"
+};
+if(firebase.apps.length==0){
+firebase.initializeApp(firebaseConfig);
+}
+export default class Signup extends Component {
+  constructor(props){
+    super(props);
+    this.state= {
+      username:"",
+      password:""
+  };
+  }
     async loadFonts(){
         await Font.loadAsync({
           'Heading': {
@@ -28,7 +44,17 @@ class Signup extends Component {
         this.loadFonts();
       }
     render() { 
-        return (<SafeAreaView style={styles.B}><Text style={styles.H}>Sign Up to RCB application</Text><TouchableHighlight style={styles.Button}><Text style={styles.Text}>Sign Up With Google</Text></TouchableHighlight>
+        return (<SafeAreaView style={styles.B}><Text style={styles.H}>Sign Up to RCB application</Text>
+        <TouchableHighlight onPress={()=>{const auth=firebase.auth();
+        const provider=new firebase.auth.GoogleAuthProvider();
+       firebase.auth().signInWithPopup(provider).then(
+        (result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          console.log(user);
+        })
+        .catch(err=>console.error(err))}} style={styles.Button}><Text style={styles.Text}>Sign Up With Google</Text></TouchableHighlight>
         <View><Text style={styles.Text}>Or Sign Up with email</Text>
         <TextInput style={styles.Input}placeholder="Email" onChangeText={(u)=>{this.setState({username:u, password:this.state.password})}}/>
         <TextInput style={styles.Input}placeholder="Password" onChangeText={(t)=>{this.setState({username:this.state.username, password:t})}}/></View>
@@ -69,4 +95,3 @@ const styles=StyleSheet.create({
         alignContent:"space-around"
     }
 })
-export default Signup;

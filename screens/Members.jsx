@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { SafeAreaView, FlatList, Text, StyleSheet } from 'react-native'
-import color from '../styles/color'
+import color from '../styles/color';
+import firebase from 'firebase';
 import * as Font from 'expo-font';
+/*function myFunction(){
+
+}
+*/
 class Members extends Component {
-    state = {}
+    state = {everything:[]}
+    getEverything(){
+        firebase.database().ref("/members").on('value', snapshot=>{
+          this.setState({everything:snapshot.val()});
+        })
+    }
     async loadFonts(){
         await Font.loadAsync({
           'Heading': {
@@ -20,28 +30,12 @@ class Members extends Component {
     
       componentDidMount() {
         this.loadFonts();
+        this.getEverything();
       }
     render() {
         return (<SafeAreaView style={styles.body}>
-            <Text style={styles.heading}>Our Members</Text><FlatList
-                data={
-                    [{ name: "Virat Kohli", role: "Batsman" },
-                    { name: "A.B.DeVilliers", role: "Batsman+Keeper" }
-                        , { name: "Devdutt Paddikal", role: "Batsman" },
-                    { name: "Yuzvendra Chahal", role: "Bowler" }, {
-                        name: "Navdeep Saini", role: "Bowler"
-                    },
-                    {
-
-                        name: "Washington Sundar",
-                        role: "All-Rounder"
-                    },
-                    { name: "Mohammad Siraj", role: "Bowler" },
-                    { name: "Glenn Maxwell", role: "All-Rounder" },
-                    { name: "Shahbaz Ahmed", role: "Batsman" },
-                {name:"Simon Katic", role: "Coach"},
-                {name:"Rajesh V.Menon", role: "Manager"}]
-                } renderItem={({ item }) => <Text style={styles.item}>{item.name}:{item.role}</Text>} />
+            <Text style={styles.heading}>Our Members</Text>
+            {this.state.everything.map(ele=><Text style={{fontSize:30, marginTop:"20px"}}>{`${ele.name}:${ele.role}`}</Text>)}
         </SafeAreaView>
         );
 

@@ -19,7 +19,6 @@ var arr=[];
 if(firebase.apps.length==0){
 firebase.initializeApp(firebaseConfig);
 }
-
 class Home extends Component {
     async loadFonts(){
         await Font.loadAsync({
@@ -44,7 +43,6 @@ class Home extends Component {
       }
     constructor(props) {
         super(props);
-        // Don't call this.setState() here!
         this.state = { val: 0 };
         this.getWins = this.getWins.bind(this);
       }
